@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fotogallerie.javafx.FXMLDocumentController">
+   <tabs>
+      <Tab text="Open Image">
+         <content>
+            <AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320">
+                <children>
+                    <Button fx:id="openFolderButton" layoutX="14.0" layoutY="14.0" onAction="#openFolder" text="Open Folder" />
+                  <Button fx:id="openImageButton" layoutX="108.0" layoutY="14.0" onAction="#openImage" text="Open Image" />
+                  <Button fx:id="resetButton" layoutX="200.0" layoutY="14.0" onAction="#startNew" text="new " />
+                  <ScrollPane fx:id="scrollPane" layoutX="14.0" layoutY="52.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="396.0" prefWidth="625.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="52.0">
+                     <content>
+                        <Pane fx:id="imageGridPane" prefHeight="393.0" prefWidth="624.0" />
+                     </content>
+                  </ScrollPane>
+                </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+   </tabs>
+</TabPane>
