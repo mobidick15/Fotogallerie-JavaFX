@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
@@ -15,9 +16,13 @@
                     <Button fx:id="openFolderButton" layoutX="14.0" layoutY="14.0" onAction="#openFolder" text="Open Folder" />
                   <Button fx:id="openImageButton" layoutX="108.0" layoutY="14.0" onAction="#openImage" text="Open Image" />
                   <Button fx:id="resetButton" layoutX="200.0" layoutY="14.0" onAction="#startNew" text="new " />
-                  <ScrollPane fx:id="scrollPane" layoutX="14.0" layoutY="52.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="396.0" prefWidth="625.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="52.0">
+                  <ScrollPane fx:id="imageScrollPane" layoutX="8.0" layoutY="41.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="41.0">
                      <content>
-                        <Pane fx:id="imageGridPane" prefHeight="393.0" prefWidth="624.0" />
+                        <TilePane fx:id="imageGridPane" hgap="4.0" vgap="4.0">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
+                           </padding>
+                        </TilePane>
                      </content>
                   </ScrollPane>
                 </children>
