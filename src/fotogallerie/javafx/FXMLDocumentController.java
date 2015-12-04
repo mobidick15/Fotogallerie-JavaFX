@@ -10,6 +10,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -32,6 +34,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private TilePane imageGridPane;
+    
     @FXML
     private ScrollPane imageScrollPane;
     
@@ -87,7 +90,9 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
+       imageScrollPane.setFitToWidth(true);
+        
     }    
     
 }
