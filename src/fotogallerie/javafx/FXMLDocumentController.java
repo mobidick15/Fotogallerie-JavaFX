@@ -13,12 +13,16 @@ import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
@@ -34,9 +38,16 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private TilePane imageGridPane;
-    
     @FXML
     private ScrollPane imageScrollPane;
+    @FXML
+    private  Tab imageTab;
+    @FXML
+    private ImageView largeImageView;
+    @FXML
+    private TabPane myTabPane;
+    @FXML
+    private  Pane largeImagePane;
     
     
     @FXML
@@ -56,6 +67,13 @@ public class FXMLDocumentController implements Initializable {
             System.out.println(image);
             smallImageView.setFitWidth(100);
             smallImageView.setFitHeight(100);
+            smallImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+                public void handle(MouseEvent event) {
+                    openLageImage(image);
+                }
+            });
+            
            
             imageGridPane.getChildren().add(smallImageView);
             
@@ -87,11 +105,36 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("start new");
         
     }
+    @FXML
+    private void clearImageTab(ActionEvent event){
+       largeImageView.setImage(null);
+    }
+    
+    @FXML
+    private void onScroll(ActionEvent event){
+        System.out.println(event);
+        
+    }
+       
+    
+    private void openLageImage(Image selectedSmallImage){
+        imageTab.setDisable(false);
+        myTabPane.getSelectionModel().select(imageTab);
+        largeImageView.setImage(selectedSmallImage);
+        
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
        imageScrollPane.setFitToWidth(true);
+       largeImagePane.heightProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+           largeImageView.setFitHeight((double) newValue);
+       });
+       
+       largeImagePane.widthProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+           largeImageView.setFitWidth((double) newValue);
+       });
         
     }    
     
