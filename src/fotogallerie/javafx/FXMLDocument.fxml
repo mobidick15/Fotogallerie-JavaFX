@@ -36,11 +36,26 @@
                <children>
                   <Pane fx:id="largeImagePane" layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="14.0">
                      <children>
-                        <ImageView fx:id="largeImageView" fitHeight="429.0" fitWidth="622.0" onZoom="#onScroll" pickOnBounds="true" preserveRatio="true" />
+                        <HBox alignment="CENTER" layoutY="11.0">
+                           <children>
+                              <ImageView fx:id="largeImageView" fitHeight="429.0" fitWidth="622.0" onMouseClicked="#startFullScreen" onZoom="#onScroll" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </HBox>
+                        <Button fx:id="diaShowButton" layoutX="282.0" layoutY="388.0" mnemonicParsing="false" onAction="#openDiashow" text="Button" />
                      </children>
                   </Pane>
-               </children></AnchorPane>
+               </children>
+            </AnchorPane>
         </content>
+      </Tab>
+      <Tab fx:id="diaShowTab" closable="false" disable="true" text="Diashow">
+         <content>
+            <HBox alignment="CENTER" onKeyPressed="#openDiashow">
+               <children>
+                  <ImageView fx:id="diashowImage" fitHeight="448.0" fitWidth="640.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </HBox>
+         </content>
       </Tab>
    </tabs>
 </TabPane>
