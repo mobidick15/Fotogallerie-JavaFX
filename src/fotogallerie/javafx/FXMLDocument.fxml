@@ -48,14 +48,5 @@
             </AnchorPane>
         </content>
       </Tab>
-      <Tab fx:id="diaShowTab" closable="false" disable="true" text="Diashow">
-         <content>
-            <HBox alignment="CENTER" onKeyPressed="#openDiashow">
-               <children>
-                  <ImageView fx:id="diashowImage" fitHeight="448.0" fitWidth="640.0" pickOnBounds="true" preserveRatio="true" />
-               </children>
-            </HBox>
-         </content>
-      </Tab>
    </tabs>
 </TabPane>

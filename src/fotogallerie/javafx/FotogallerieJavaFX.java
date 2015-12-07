@@ -6,12 +6,15 @@
 package fotogallerie.javafx;
 
 import java.io.File;
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 /**
