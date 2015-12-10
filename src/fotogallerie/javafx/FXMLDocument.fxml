@@ -41,9 +41,9 @@
                               <ImageView fx:id="largeImageView" fitHeight="429.0" fitWidth="622.0" onMouseClicked="#startFullScreen" onZoom="#onScroll" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </HBox>
-                        <Button fx:id="diaShowButton" layoutX="282.0" layoutY="388.0" mnemonicParsing="false" onAction="#openDiashow" text="Button" />
                      </children>
                   </Pane>
+                  <Button fx:id="diaShowButton" layoutX="250.0" layoutY="400.0" mnemonicParsing="false" onAction="#openDiashow" text="Button" AnchorPane.bottomAnchor="20.0" />
                </children>
             </AnchorPane>
         </content>
