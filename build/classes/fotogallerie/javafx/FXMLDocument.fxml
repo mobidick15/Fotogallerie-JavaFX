@@ -26,6 +26,7 @@
                         </TilePane>
                      </content>
                   </ScrollPane>
+                  <Button layoutX="247.0" layoutY="14.0" mnemonicParsing="false" onAction="#openDiashow" text="Diashow" textAlignment="JUSTIFY" />
                 </children>
             </AnchorPane>
          </content>
@@ -36,14 +37,14 @@
                <children>
                   <Pane fx:id="largeImagePane" layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="14.0">
                      <children>
-                        <HBox alignment="CENTER" layoutY="11.0">
+                        <HBox alignment="CENTER" fillHeight="false" layoutY="11.0">
                            <children>
                               <ImageView fx:id="largeImageView" fitHeight="429.0" fitWidth="622.0" onMouseClicked="#startFullScreen" onZoom="#onScroll" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </HBox>
+                        <Button fx:id="diaShowButton" layoutX="-15.0" layoutY="-14.0" mnemonicParsing="false" onAction="#openDiashow" text="Diashow" />
                      </children>
                   </Pane>
-                  <Button fx:id="diaShowButton" layoutX="250.0" layoutY="400.0" mnemonicParsing="false" onAction="#openDiashow" text="Button" AnchorPane.bottomAnchor="20.0" />
                </children>
             </AnchorPane>
         </content>

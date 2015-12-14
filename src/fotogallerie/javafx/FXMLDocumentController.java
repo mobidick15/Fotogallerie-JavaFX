@@ -13,8 +13,14 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
+import javafx.animation.ParallelTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -59,17 +65,17 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
     private int imageIndex = 0;
 
     public ImageView[] imagesToSlide;
-    private Timeline timeline;
+    private SequentialTransition diashowAnimation;
     private Stage diaShowStage;
 
     @FXML
     private TilePane imageGridPane;
-   
+
     @FXML
     private ScrollPane imageScrollPane;
     @FXML
     private Tab imageTab;
-  
+
     @FXML
     private ImageView largeImageView;
     @FXML
@@ -81,6 +87,7 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
     private Pane largeImagePane;
     @FXML
     private Button diaShowButton;
+    
 
     @FXML
     private void openFolder(ActionEvent event) {
@@ -89,7 +96,6 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
         File file = dicChooser.showDialog(null);
         addFilesFromDir(file);
         addImagesToGrid();
-        
 
     }
 
@@ -105,8 +111,8 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
             }
         }
     }
-    
-    private void addImagesToGrid(){
+
+    private void addImagesToGrid() {
         for (int i = 0; i < imageList.size(); i++) {
 
             ImageView smallImageView = new ImageView();
@@ -133,6 +139,12 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
     private void openImage(ActionEvent event) {
         imageList.clear();
         FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter jpgFilter = new FileChooser.ExtensionFilter("jpg files (*.jpg)", "*.jpg");
+        FileChooser.ExtensionFilter jpegFilter = new FileChooser.ExtensionFilter("jpeg files (*.jpeg)", "*.jpeg");
+        FileChooser.ExtensionFilter pngFilter = new FileChooser.ExtensionFilter("png files (*.png)", "*.png");
+        FileChooser.ExtensionFilter combinedFilterFilter = new FileChooser.ExtensionFilter("Images ", "*.jpg","*.png","*.jpeg");
+        
+        fileChooser.getExtensionFilters().addAll(jpgFilter,jpegFilter,pngFilter,combinedFilterFilter);
         List<File> list = fileChooser.showOpenMultipleDialog(null);
         if (list != null) {
             for (File file : list) {
@@ -149,7 +161,7 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
 
     @FXML
     private void startNew(ActionEvent event) throws IOException, Exception {
-        
+
         imageList.clear();
         Stage stage = (Stage) myTabPane.getScene().getWindow();
         stage.close();
@@ -166,7 +178,7 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
 
     @FXML
     private void onScroll(ZoomEvent event) {
-        
+
         largeImageView.setScaleX(largeImageView.getScaleX() * event.getZoomFactor());
         largeImageView.setScaleY(largeImageView.getScaleY() * event.getZoomFactor());
 
@@ -192,9 +204,17 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
 
     @FXML
     private void openDiashow(ActionEvent event) throws InterruptedException {
-
+        
+        imageIndex = ListOfImage.indexOf(largeImageView.getImage());
         diashowImage = new ImageView();
-        diashowImage.setImage(largeImageView.getImage());
+        diashowImage.setOpacity(0f);
+        if(imageIndex == -1){
+            diashowImage.setImage(ListOfImage.get(0));
+            imageIndex = 1;
+        }else {
+            diashowImage.setImage(ListOfImage.get(imageIndex));
+            imageIndex++;
+        }
         diaShowStage.setFullScreen(true);
 
         startDiashow(null);
@@ -206,22 +226,14 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.SPACE) {
-                    if (timeline.getStatus() == Animation.Status.RUNNING) {
-                        timeline.pause();
+                    if (diashowAnimation.getStatus() == Animation.Status.RUNNING) {
+                        diashowAnimation.pause();
                     } else {
-                        timeline.play();
+                        diashowAnimation.play();
                     }
-                } else if (event.getCode() == KeyCode.LEFT) {
-
-                    imageIndex--;
-
-                } else if (event.getCode() == KeyCode.RIGHT) {
-
-                    imageIndex++;
-                    diashowImage.setImage(ListOfImage.get(imageIndex));
                 } else if (event.getCode() == KeyCode.ESCAPE) {
                     diaShowStage.close();
-                    timeline.stop();
+                    diashowAnimation.stop();
                 }
             }
         }
@@ -234,27 +246,47 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
     @FXML
     private void startDiashow(KeyCode event) throws InterruptedException {
 
-        imageIndex = ListOfImage.indexOf(largeImageView.getImage()) + 1;
+        
         int cycleCount = ListOfImage.size() - imageIndex + 1;
-        timeline = new Timeline();
+        diashowAnimation = new SequentialTransition();
+
+        FadeTransition fadeInTransition = new FadeTransition(Duration.millis(2000), diashowImage);
+        fadeInTransition.setFromValue(0.0f);
+        fadeInTransition.setToValue(1.0f);
+
+        RotateTransition imageRotation = new RotateTransition(Duration.millis(750), diashowImage);
+        imageRotation.setByAngle(720f);
+
+        PauseTransition pauseTransition = new PauseTransition(Duration.millis(3000));
+
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(2000), diashowImage);
+        scaleTransition.setToX(0f);
+        scaleTransition.setToY(0f);
 
         KeyValue transparent = new KeyValue(diashowImage.opacityProperty(), 0.0);
-        KeyValue opaque = new KeyValue(diashowImage.opacityProperty(), 1.0);
-
-        KeyFrame startFadeIn = new KeyFrame(Duration.ZERO, transparent);
-        KeyFrame endFadeIn = new KeyFrame(Duration.millis(250), opaque);
-        KeyFrame startFadeOut = new KeyFrame(Duration.millis(2000), opaque);
-        KeyFrame endFadeOut = new KeyFrame(Duration.millis(2500), e -> {
+        KeyFrame endFadeOut = new KeyFrame(Duration.millis(500), e -> {
             if (imageIndex < ListOfImage.size()) {
                 diashowImage.setImage(ListOfImage.get(imageIndex));
                 imageIndex++;
             }
         }, transparent);
 
-        timeline.getKeyFrames().addAll(startFadeIn, endFadeIn, startFadeOut, endFadeOut);
+        Timeline changeImage = new Timeline(endFadeOut);
+        ParallelTransition showImage = new ParallelTransition();
+        showImage.getChildren().addAll(imageRotation, fadeInTransition);
 
-        timeline.setCycleCount(cycleCount);
-        timeline.play();
+        diashowAnimation.getChildren().addAll(showImage, pauseTransition, scaleTransition, changeImage);
+
+        diashowAnimation.setCycleCount(cycleCount);
+        diashowAnimation.play();
+        diashowAnimation.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                diaShowStage.close();
+            }
+
+        });
 
     }
 
@@ -269,7 +301,7 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         diaShowStage = new Stage();
-       
+
         imageScrollPane.setFitToWidth(true);
         largeImagePane.heightProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             largeImageView.setFitHeight((double) newValue);
@@ -278,8 +310,8 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
         largeImagePane.widthProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             largeImageView.setFitWidth((double) newValue);
         });
-        
-       diaShowStage.heightProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+
+        diaShowStage.heightProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             diashowImage.setSmooth(true);
             diashowImage.setFitHeight((double) newValue);
         });
