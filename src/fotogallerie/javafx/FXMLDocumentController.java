@@ -42,6 +42,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundPosition;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -87,16 +89,55 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
     private Pane largeImagePane;
     @FXML
     private Button diaShowButton;
-    
+    @FXML
+    private Button zoomInButton;
+    @FXML
+    private Button zoomOutButton;
 
     @FXML
     private void openFolder(ActionEvent event) {
         imageList.clear();
         DirectoryChooser dicChooser = new DirectoryChooser();
         File file = dicChooser.showDialog(null);
+        if(file != null){
         addFilesFromDir(file);
         addImagesToGrid();
+        }
+    }
+    
+    @FXML
+    private void openImage(ActionEvent event) {
+        imageList.clear();
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter jpgFilter = new FileChooser.ExtensionFilter("jpg files (*.jpg)", "*.jpg");
+        FileChooser.ExtensionFilter jpegFilter = new FileChooser.ExtensionFilter("jpeg files (*.jpeg)", "*.jpeg");
+        FileChooser.ExtensionFilter pngFilter = new FileChooser.ExtensionFilter("png files (*.png)", "*.png");
+        FileChooser.ExtensionFilter combinedFilterFilter = new FileChooser.ExtensionFilter("Images ", "*.jpg", "*.png", "*.jpeg");
 
+        fileChooser.getExtensionFilters().addAll(jpgFilter, jpegFilter, pngFilter, combinedFilterFilter);
+        List<File> list = fileChooser.showOpenMultipleDialog(null);
+        if (list != null) {
+            for (File file : list) {
+                String fileName = file.getName().toLowerCase();
+
+                if (fileName.endsWith(".png") || fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
+                    imageList.add(file);
+                }
+
+            }
+            addImagesToGrid();
+        }
+    }
+
+    @FXML
+    private void startNew(ActionEvent event) throws IOException, Exception {
+
+        imageList.clear();
+        Stage stage = (Stage) myTabPane.getScene().getWindow();
+        stage.close();
+
+        FotogallerieJavaFX fotogallerie = new FotogallerieJavaFX();
+        fotogallerie.start(stage);
     }
 
     private void addFilesFromDir(File dir) {
@@ -135,40 +176,7 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
         }
     }
 
-    @FXML
-    private void openImage(ActionEvent event) {
-        imageList.clear();
-        FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter jpgFilter = new FileChooser.ExtensionFilter("jpg files (*.jpg)", "*.jpg");
-        FileChooser.ExtensionFilter jpegFilter = new FileChooser.ExtensionFilter("jpeg files (*.jpeg)", "*.jpeg");
-        FileChooser.ExtensionFilter pngFilter = new FileChooser.ExtensionFilter("png files (*.png)", "*.png");
-        FileChooser.ExtensionFilter combinedFilterFilter = new FileChooser.ExtensionFilter("Images ", "*.jpg","*.png","*.jpeg");
-        
-        fileChooser.getExtensionFilters().addAll(jpgFilter,jpegFilter,pngFilter,combinedFilterFilter);
-        List<File> list = fileChooser.showOpenMultipleDialog(null);
-        if (list != null) {
-            for (File file : list) {
-                String fileName = file.getName().toLowerCase();
-
-                if (fileName.endsWith(".png") || fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
-                    imageList.add(file);
-                }
-
-            }
-            addImagesToGrid();
-        }
-    }
-
-    @FXML
-    private void startNew(ActionEvent event) throws IOException, Exception {
-
-        imageList.clear();
-        Stage stage = (Stage) myTabPane.getScene().getWindow();
-        stage.close();
-
-        FotogallerieJavaFX fotogallerie = new FotogallerieJavaFX();
-        fotogallerie.start(stage);
-    }
+    
 
     @FXML
     private void clearImageTab(ActionEvent event
@@ -185,6 +193,19 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
     }
 
     @FXML
+    private void zoomIn() {
+        largeImageView.setScaleX(largeImageView.getScaleX() * 2);
+        largeImageView.setScaleY(largeImageView.getScaleY() * 2);
+
+    }
+
+    @FXML
+    private void zoomOut() {
+        largeImageView.setScaleX(largeImageView.getScaleX() * 0.5);
+        largeImageView.setScaleY(largeImageView.getScaleY() * 0.5);
+    }
+
+    @FXML
     private void startFullScreen(MouseEvent event) {
 
         if (event.getClickCount() == 2) {
@@ -192,26 +213,26 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
             if (stage.isFullScreen()) {
                 stage.setFullScreen(false);
 
-                diaShowButton.setVisible(true);
+                
 
             } else {
                 stage.setFullScreen(true);
 
-                diaShowButton.setVisible(false);
+                
             }
         }
     }
 
     @FXML
     private void openDiashow(ActionEvent event) throws InterruptedException {
-        
+
         imageIndex = ListOfImage.indexOf(largeImageView.getImage());
         diashowImage = new ImageView();
         diashowImage.setOpacity(0f);
-        if(imageIndex == -1){
+        if (imageIndex == -1) {
             diashowImage.setImage(ListOfImage.get(0));
             imageIndex = 1;
-        }else {
+        } else {
             diashowImage.setImage(ListOfImage.get(imageIndex));
             imageIndex++;
         }
@@ -246,7 +267,6 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
     @FXML
     private void startDiashow(KeyCode event) throws InterruptedException {
 
-        
         int cycleCount = ListOfImage.size() - imageIndex + 1;
         diashowAnimation = new SequentialTransition();
 
@@ -295,6 +315,9 @@ public class FXMLDocumentController extends FotogallerieJavaFX implements Initia
         imageTab.setDisable(false);
         myTabPane.getSelectionModel().select(imageTab);
         largeImageView.setImage(selectedSmallImage);
+        largeImageView.setFitHeight(largeImagePane.getHeight());
+        largeImageView.setFitWidth(largeImagePane.getWidth());
+        
 
     }
 

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
@@ -8,7 +10,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<TabPane fx:id="myTabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fotogallerie.javafx.FXMLDocumentController">
+<TabPane fx:id="myTabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" stylesheets="@fotogallerieStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fotogallerie.javafx.FXMLDocumentController">
    <tabs>
       <Tab closable="false" text="Open Image">
          <content>
@@ -17,34 +19,45 @@
                     <Button fx:id="openFolderButton" layoutX="14.0" layoutY="14.0" onAction="#openFolder" text="Open Folder" />
                   <Button fx:id="openImageButton" layoutX="108.0" layoutY="14.0" onAction="#openImage" text="Open Image" />
                   <Button fx:id="resetButton" layoutX="200.0" layoutY="14.0" onAction="#startNew" text="new " />
-                  <ScrollPane fx:id="imageScrollPane" layoutX="8.0" layoutY="41.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="41.0">
+                  <Button layoutX="247.0" layoutY="14.0" mnemonicParsing="false" onAction="#openDiashow" text="Diashow" textAlignment="JUSTIFY" />
+                  <ScrollPane fx:id="imageScrollPane" layoutX="8.0" layoutY="41.0" styleClass="ThumbnailscrollPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="41.0">
                      <content>
-                        <TilePane fx:id="imageGridPane" hgap="4.0" prefHeight="404.0" prefWidth="631.0" vgap="4.0">
+                        <TilePane fx:id="imageGridPane" hgap="4.0" prefHeight="404.0" prefWidth="631.0" styleClass="ThumbnailscrollPane" vgap="4.0">
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
                            </padding>
                         </TilePane>
                      </content>
                   </ScrollPane>
-                  <Button layoutX="247.0" layoutY="14.0" mnemonicParsing="false" onAction="#openDiashow" text="Diashow" textAlignment="JUSTIFY" />
                 </children>
             </AnchorPane>
          </content>
       </Tab>
       <Tab fx:id="imageTab" closable="false" disable="true" text="Image">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="largeImagetab">
                <children>
-                  <Pane fx:id="largeImagePane" layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="14.0">
+                  <HBox fx:id="largeImagePane" alignment="CENTER" fillHeight="false" AnchorPane.bottomAnchor="-33.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <HBox alignment="CENTER" fillHeight="false" layoutY="11.0">
-                           <children>
-                              <ImageView fx:id="largeImageView" fitHeight="429.0" fitWidth="622.0" onMouseClicked="#startFullScreen" onZoom="#onScroll" pickOnBounds="true" preserveRatio="true" />
-                           </children>
-                        </HBox>
-                        <Button fx:id="diaShowButton" layoutX="-15.0" layoutY="-14.0" mnemonicParsing="false" onAction="#openDiashow" text="Diashow" />
+                        <ImageView fx:id="largeImageView" onMouseClicked="#startFullScreen" onZoom="#onScroll" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER" />
                      </children>
-                  </Pane>
+                  </HBox>
+                  <VBox>
+                     <children>
+                        <Button fx:id="diaShowButton" mnemonicParsing="false" onAction="#openDiashow" styleClass="largeImageButton" text="Diashow" textFill="WHITE">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Button>
+                        <Button fx:id="zoomInButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#zoomIn" styleClass="largeImageButton" text="+" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font></Button>
+                        <Button fx:id="zoomOutButton" layoutX="10.0" layoutY="37.0" mnemonicParsing="false" onAction="#zoomOut" styleClass="largeImageButton" text="-" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font></Button>
+                     </children>
+                  </VBox>
                </children>
             </AnchorPane>
         </content>
